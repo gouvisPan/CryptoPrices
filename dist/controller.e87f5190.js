@@ -443,8 +443,8 @@ var CryptoListView = /*#__PURE__*/function (_View) {
     key: "_generateMarkup",
     value: function _generateMarkup() {
       return this._data.map(function (d) {
-        return "<li class=\"preview\">\n      <a class=\"preview__link preview__link--active\" href=\"#".concat(d.id, "\">\n      <div class=\"preview__data\">\n          <div class=\"preview__title\"> \n            <h4 class=\"preview__name\">").concat(d.name, "</h4>\n            <h2 class=\"preview__symbol\">(").concat(d.symbol.toUpperCase(), ")</h2>\n          </div>\n          <p class=\"preview__price\">$").concat(d.price, "</p>\n      </div>\n      </a>\n   </li>");
-      });
+        return "<li class=\"preview\">\n      <a class=\"preview__link preview__link--active\" href=\"#".concat(d.id, "\">\n      <div class=\"preview__data\">\n          <div class=\"preview__rank\">").concat(d.rank, "</div>\n          <div class=\"preview__title\"> \n            <h4 class=\"preview__name\">").concat(d.name, "</h4>\n            <h2 class=\"preview__symbol\">(").concat(d.symbol.toUpperCase(), ")</h2>\n          </div>\n          <p class=\"preview__price\">$").concat(d.price, "</p>\n\n      </div>\n      </a>\n   </li>");
+      }).join("");
     }
   }]);
 
@@ -750,7 +750,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57233" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58551" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
