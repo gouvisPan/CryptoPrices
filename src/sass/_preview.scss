@@ -4,15 +4,14 @@
     &:visited {
       display: flex;
       align-items: center;
-      padding: 1.5rem 3.25rem;
+      padding: .4rem 1rem;
       transition: all 0.3s;
-      border-right: 1px solid #fff;
       text-decoration: none;
     }
 
     &:hover {
-      background-color: $color-grey-light-1;
-      transform: translateY(-2px);
+      background-color: $color-grey-light-3;
+
     }
 
     &--active {
@@ -30,7 +29,6 @@
     backface-visibility: hidden;
 
     &::before {
-      content: '';
       display: block;
       height: 100%;
       width: 100%;
@@ -55,51 +53,37 @@
   }
 
   &__data {
-    display: grid;
+    display: flex;
     width: 100%;
-    grid-template-columns: 1fr 2rem;
     row-gap: 0.1rem;
     align-items: center;
   }
 
   &__title {
+    flex-grow: 1;
     grid-column: 1/-1;
-    font-size: 1.45rem;
-    color: $color-primary;
-    text-transform: uppercase;
-    font-weight: 600;
-
-    // This is how text is truncated!
-    text-overflow: ellipsis;
-    max-width: 25rem;
-    white-space: nowrap;
-    overflow: hidden;
+    display: flex;
+    gap: 1rem;
   }
 
-  &__publisher {
+  &__name {
+    font-size: 1.45rem;
+    color: $color-grey-light-2;
+    font-weight: 600;
+  }
+  &__symbol {
+    font-size: 1.2rem;
+    color: $color-grey-light-2;
+    font-weight: 400;
+
+  }
+
+
+  &__price {
     font-size: 1.15rem;
     color: $color-grey-dark-2;
     text-transform: uppercase;
     font-weight: 600;
   }
 
-  &__user-generated {
-    background-color: darken($color-grey-light-2, 2%);
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 2rem;
-    width: 2rem;
-    border-radius: 10rem;
-
-    margin-left: auto;
-    margin-right: 1.75rem;
-
-    svg {
-      height: 1.2rem;
-      width: 1.2rem;
-      fill: $color-primary;
-    }
-  }
 }

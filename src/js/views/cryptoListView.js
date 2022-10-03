@@ -7,16 +7,17 @@ class CryptoListView extends View {
 
   _generateMarkup() {
     return this._data.map((d) => {
-      return ` <li class="preview">
-                    <a class="preview__link preview__link--active" href="#${d.id}">
-                    <div class="preview__data">
-                        <h4 class="preview__title">${d.name}</h4>
-                        <p class="preview__publisher">${d.price}</p>
-                        <div class="preview__user-generated">
-                        </div>
-                    </div>
-                    </a>
-                 </li>`;
+      return `<li class="preview">
+      <a class="preview__link preview__link--active" href="#${d.id}">
+      <div class="preview__data">
+          <div class="preview__title"> 
+            <h4 class="preview__name">${d.name}</h4>
+            <h2 class="preview__symbol">(${d.symbol.toUpperCase()})</h2>
+          </div>
+          <p class="preview__price">$${d.price}</p>
+      </div>
+      </a>
+   </li>`;
     });
   }
 }

@@ -404,7 +404,7 @@ body {
           backface-visibility: hidden;
 }
 .preview__fig::before {
-  content: "";
+ 
   display: block;
   height: 100%;
   width: 100%;
@@ -479,7 +479,7 @@ body {
   padding: 0 3.5rem;
 }
 .pagination::after {
-  content: "";
+ 
   display: table;
   clear: both;
 }
@@ -510,7 +510,6 @@ body {
   transform-origin: top;
 }
 .crypto-details__fig::before {
-  content: "";
   display: block;
   height: 100%;
   width: 100%;

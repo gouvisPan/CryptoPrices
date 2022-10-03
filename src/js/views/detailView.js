@@ -24,12 +24,12 @@ class DetailView extends View {
         <li>${this._data.fromAthPerc} </li>
     </div>
     <div class="details-bottom">
-        <ul>
+       
         <li>${this._data.marketCap}</li>
         <li>${this._data.volume24h}</li>
         <li>${this._data.circulatingSupply}</li>
         <li>${this._data.totalSupply ? this._data.totalSupply : "-"}</li>
-        </ul>
+       
     </div>
     `;
   }
