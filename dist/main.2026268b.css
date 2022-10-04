@@ -100,7 +100,7 @@ body {
   font-size: 1.3rem;
   font-weight: 600;
   border: none;
-  background-color: #121212;
+  background-color: #f2efee;
   padding: 0.8rem 1.2rem;
   border-radius: 10rem;
   cursor: pointer;
@@ -144,8 +144,8 @@ body {
   outline: none;
 }
 .btn--round svg {
-  height: 2.5rem;
-  width: 2.5rem;
+  height: 1rem;
+  width: 1rem;
   fill: #fff;
 }
 
@@ -250,8 +250,9 @@ body {
   border-radius: 10rem;
   display: flex;
   align-items: center;
-  padding-left: 3rem;
+  padding-left: 5rem;
   transition: all 0.3s;
+  height: 3.8rem;
 }
 .search:focus-within {
   transform: translateY(-2px);
@@ -282,6 +283,7 @@ body {
 .search__btn {
   font-weight: 600;
   font-family: inherit;
+  height: 3.8rem;
 }
 
 .nav {
@@ -306,13 +308,13 @@ body {
   background: none;
   border: none;
   cursor: pointer;
-  padding: 0 1.5rem;
+  padding: 0 1rem;
   transition: all 0.3s;
   display: flex;
   align-items: center;
 }
 .nav__btn svg {
-  height: 2.4rem;
+  height: 3rem;
   width: 2.4rem;
   fill: #2500f6;
   margin-right: 0.7rem;
@@ -359,7 +361,7 @@ body {
 .preview__link:link, .preview__link:visited {
   display: flex;
   align-items: center;
-  padding: 0.4rem 1rem;
+  padding: 1rem 1rem;
   transition: all 0.3s;
   text-decoration: none;
 }
@@ -394,6 +396,10 @@ body {
   height: 100%;
   object-fit: cover;
   transition: all 0.3s;
+}
+.preview__rank {
+  color: #f2efee;
+  width: 3.2rem;
 }
 .preview__data {
   display: flex;
@@ -432,7 +438,7 @@ body {
 }
 
 .pagination {
-  margin-top: auto;
+  margin-top: 5rem;
   padding: 0 3.5rem;
 }
 .pagination::after {

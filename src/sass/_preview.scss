@@ -4,7 +4,7 @@
     &:visited {
       display: flex;
       align-items: center;
-      padding: .4rem 1rem;
+      padding: 1rem 1rem;
       transition: all 0.3s;
       text-decoration: none;
     }
@@ -52,6 +52,11 @@
     }
   }
 
+  &__rank {
+    color: $color-grey-light-2;
+    width: 3.2rem;
+
+  }
   &__data {
     display: flex;
     width: 100%;

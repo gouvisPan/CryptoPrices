@@ -442,14 +442,15 @@ var CryptoListView = /*#__PURE__*/function (_View) {
   _createClass(CryptoListView, [{
     key: "_generateMarkup",
     value: function _generateMarkup() {
-      return this._data.map(function (d) {
+      return ["<li class=\"preview\">\n    <div class=\"preview__data\">\n        <div class=\"preview__rank\">Rank</div>\n        <div class=\"preview__title\"> \n          <h4 class=\"preview__name\" style=\"font-size:1.2rem;margin-left:.5rem\" >Coin/Token</h4>\n        </div>\n        <p class=\"preview__price\">Price</p>\n\n    </div>\n    </a>\n </li>", this._data.map(function (d) {
         return "<li class=\"preview\">\n      <a class=\"preview__link preview__link--active\" href=\"#".concat(d.id, "\">\n      <div class=\"preview__data\">\n          <div class=\"preview__rank\">").concat(d.rank, "</div>\n          <div class=\"preview__title\"> \n            <h4 class=\"preview__name\">").concat(d.name, "</h4>\n            <h2 class=\"preview__symbol\">(").concat(d.symbol.toUpperCase(), ")</h2>\n          </div>\n          <p class=\"preview__price\">$").concat(d.price, "</p>\n\n      </div>\n      </a>\n   </li>");
-      }).join("");
+      }).join("")].join("");
     }
   }]);
 
   return CryptoListView;
-}(_view.default);
+}(_view.default); // <img src=./node_modules/cryptocurrency-icons/svg/white/aave.svg/>${d.symbol.toLowerCase()}"/>
+
 
 var _default = new CryptoListView();
 
@@ -750,7 +751,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58551" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61808" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
