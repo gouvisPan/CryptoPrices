@@ -442,7 +442,7 @@ var CryptoListView = /*#__PURE__*/function (_View) {
   _createClass(CryptoListView, [{
     key: "_generateMarkup",
     value: function _generateMarkup() {
-      return ["<li class=\"preview\">\n    <div class=\"preview__data\">\n        <div class=\"preview__rank\">Rank</div>\n        <div class=\"preview__title\"> \n          <h4 class=\"preview__name\" style=\"font-size:1.2rem;margin-left:.5rem\" >Coin/Token</h4>\n        </div>\n        <p class=\"preview__price\">Price</p>\n\n    </div>\n    </a>\n </li>", this._data.map(function (d) {
+      return ["<li class=\"preview\">\n    <div class=\"preview__data\">\n        <div class=\"preview__rank \">Rank</div>\n      \n        <h4 class=\"preview__name preview__head-coin\">Coin/Token</h4>\n       \n        <p class=\"preview__price preview__head-price\">Price</p>\n\n    </div>\n    </a>\n </li>", this._data.map(function (d) {
         return "<li class=\"preview\">\n      <a class=\"preview__link preview__link--active\" href=\"#".concat(d.id, "\">\n      <div class=\"preview__data\">\n          <div class=\"preview__rank\">").concat(d.rank, "</div>\n          <div class=\"preview__title\"> \n            <h4 class=\"preview__name\">").concat(d.name, "</h4>\n            <h2 class=\"preview__symbol\">(").concat(d.symbol.toUpperCase(), ")</h2>\n          </div>\n          <p class=\"preview__price\">$").concat(d.price, "</p>\n\n      </div>\n      </a>\n   </li>");
       }).join("")].join("");
     }
@@ -530,7 +530,13 @@ var DetailView = /*#__PURE__*/function (_View) {
   }, {
     key: "_generateMarkup",
     value: function _generateMarkup() {
-      return "\n    <div class=\"details-top\">\n        <span>".concat(this._data.name, " (").concat(this._data.symbol.toUpperCase(), ")</span>\n        <span>").concat(this._data.price, " </span> <span>").concat(this._data.name, " </span>\n        <li>").concat(this._data.ath, " </li>\n        <li>").concat(this._data.fromAthPerc, " </li>\n    </div>\n    <div class=\"details-bottom\">\n       \n        <li>").concat(this._data.marketCap, "</li>\n        <li>").concat(this._data.volume24h, "</li>\n        <li>").concat(this._data.circulatingSupply, "</li>\n        <li>").concat(this._data.totalSupply ? this._data.totalSupply : "-", "</li>\n       \n    </div>\n    ");
+      var percClass = this._data.priceChangePerc > 0 ? "--g" : "--r";
+      var largeNumFormater = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 0
+      });
+      return "\n    <div class=\"crypto-details__top\">\n        <span class=\"crypto-details__top__name\">".concat(this._data.name, " (").concat(this._data.symbol.toUpperCase(), ")</span>\n        <div class=\"crypto-details__top__price\">\n          <span class=\"crypto-details__top__price__value\">$").concat(this._data.price, "</span>\n          <span class=\"crypto-details__top__price__perc").concat(percClass, "\">(").concat(this._data.priceChangePerc > 0 ? ["+", this._data.priceChangePerc.toFixed(2)].join("") : this._data.priceChangePerc.toFixed(2), "%)</span>\n        </div>\n    </div>\n    <div class=\"crypto-details__bottom\">\n        <li>ATH: ").concat(this._data.ath, " </li>\n        ").concat(this._data.fromAthPerc < 0 ? "<li>From ATH:  ".concat(this._data.fromAthPerc.toFixed(2), "%</li> ") : "", "\n       \n        <li classname=\"").concat(percClass, "\">").concat(largeNumFormater.format(this._data.marketCap), "</li>\n        <li>Market Cap: ").concat(largeNumFormater.format(this._data.volume24h), " (#").concat(this._data.rank, ")</li>\n        <li>").concat(this._data.circulatingSupply, "</li>\n        <li>").concat(this._data.totalSupply ? this._data.totalSupply : "-", "</li>\n       \n    </div>\n    ");
     }
   }]);
 
@@ -616,9 +622,9 @@ var PaginationView = /*#__PURE__*/function (_View) {
       var totalPages = Math.ceil(this._data.cryptoInfo.length / this._data.resultsPerPage);
       console.log(curPage);
       console.log(totalPages);
-      if (curPage === 1 && totalPages > 1) return "\n    <button data-goto=\"".concat(curPage + 1, "\" class=\"btn--inline  pagination__btn--next\">\n    <span>Page ").concat(curPage + 1, "</span>\n    <svg class=\"search__icon\">\n      <use href=\"src/img/icons.svg#icon-arrow-right\"></use>\n    </svg>\n  </button> \n    ");
-      if (totalPages > 1 && curPage === totalPages) return "\n    <button data-goto=\"".concat(curPage - 1, "\" class=\"btn--inline  pagination__btn--prev\">\n            <svg class=\"search__icon\">\n              <use href=\"src/img/icons.svg#icon-arrow-left\"></use>\n            </svg>\n            <span>Page ").concat(curPage - 1, "</span>\n          </button>\n    ");
-      if (curPage < totalPages) return "\n        <button data-goto=\"".concat(curPage - 1, "\" class=\"btn--inline  pagination__btn--prev\">\n            <svg class=\"search__icon\">\n              <use href=\"src/img/icons.svg#icon-arrow-left\"></use>\n            </svg>\n            <span>Page ").concat(curPage - 1, "</span>\n          </button>\n\n          <button data-goto=\"").concat(curPage + 1, "\" class=\"btn--inline  pagination__btn--next\">\n            <span>Page ").concat(curPage + 1, "</span>\n            <svg class=\"search__icon\">\n              <use href=\"src/img/icons.svg#icon-arrow-right\"></use>\n            </svg>\n          </button> \n    ");
+      if (curPage === 1 && totalPages > 1) return "\n    <button data-goto=\"".concat(curPage + 1, "\" class=\"btn--inline  pagination__btn--next\">\n    <span>Page ").concat(curPage + 1, "</span>\n \n  </button> \n    ");
+      if (totalPages > 1 && curPage === totalPages) return "\n    <button data-goto=\"".concat(curPage - 1, "\" class=\"btn--inline  pagination__btn--prev\">\n            <span>Page").concat(curPage - 1, "</span>\n          </button>\n    ");
+      if (curPage < totalPages) return "\n        <button data-goto=\"".concat(curPage - 1, "\" class=\"btn--inline  pagination__btn--prev\">\n         \n            <span>Page ").concat(curPage - 1, "</span>\n          </button>\n\n          <button data-goto=\"").concat(curPage + 1, "\" class=\"btn--inline  pagination__btn--next\">\n            <span>Page ").concat(curPage + 1, "</span>\n    \n          </button> \n    ");
       return "";
     }
   }]);
@@ -751,7 +757,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61808" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62280" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

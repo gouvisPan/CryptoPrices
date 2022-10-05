@@ -20,7 +20,7 @@ export const fetchCryptoInfo = async function () {
       marketCap: coin.market_cap,
       name: coin.name,
       price: coin.current_price,
-      priceChangePerc: coin.price_change_percentage_24h,
+      priceChangePerc: coin.price_change_percentage_24h ,
       volume24h: coin.total_volume,
       rank: coin.market_cap_rank,
       circulatingSupply: coin.circulating_supply,

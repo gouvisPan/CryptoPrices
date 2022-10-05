@@ -8,11 +8,11 @@ class CryptoListView extends View {
   _generateMarkup() {
     return [ `<li class="preview">
     <div class="preview__data">
-        <div class="preview__rank">Rank</div>
-        <div class="preview__title"> 
-          <h4 class="preview__name" style="font-size:1.2rem;margin-left:.5rem" >Coin/Token</h4>
-        </div>
-        <p class="preview__price">Price</p>
+        <div class="preview__rank ">Rank</div>
+      
+        <h4 class="preview__name preview__head-coin">Coin/Token</h4>
+       
+        <p class="preview__price preview__head-price">Price</p>
 
     </div>
     </a>

@@ -1,0 +1,61 @@
+.crypto-details {
+  background-color: $color-grey-light-1;
+  padding-left: 2rem;
+  list-style: none;
+  color: $color-white;
+  
+  &__top{
+    display: flex;
+    flex-direction: column;
+ 
+
+  &__name{
+    font-size: 3rem;
+    font-weight: 700;
+  }
+
+  &__price{
+    display: flex;
+    gap: 2rem;
+    
+
+    &__value{
+      font-size: 3rem;
+      font-weight: 500;
+      
+    }
+
+    &__perc{
+      
+      &--g{
+          color:rgba(23, 151, 23, 0.849);
+          font-size: 1.5rem;
+          font-weight: 500;
+          align-self: center;
+      }
+
+      &--r{
+        color:rgb(211, 48, 48);
+        font-size: 1.5rem;
+        font-weight: 500;
+        align-self: center;
+      }
+    }
+  }
+}
+  &__bottom{
+    display: flex;
+    flex-direction: column;
+
+    li{
+      font-size: 1.8rem;
+    }
+  }
+  .--g{
+    color:green;
+  }
+
+  .--r{
+    color:green;
+  }
+}

@@ -56,13 +56,13 @@
 }
 
 .btn--inline {
-  color: $color-primary;
+  color: $color-grey-light-1;
   font-size: 1.3rem;
   font-weight: 600;
   border: none;
   background-color: $color-grey-light-2;
   padding: 0.8rem 1.2rem;
-  border-radius: 10rem;
+  border-radius: 2rem;
   cursor: pointer;
 
   display: flex;
@@ -81,8 +81,7 @@
   }
 
   &:hover {
-    color: $color-grad-2;
-    background-color: $color-grey-light-2;
+    background-color: $color-grey-dark-2;
   }
 
   &:focus {

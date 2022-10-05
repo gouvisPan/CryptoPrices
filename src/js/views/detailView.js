@@ -16,17 +16,29 @@ class DetailView extends View {
   }
 
   _generateMarkup() {
+    const  percClass=
+    this._data.priceChangePerc > 0 ? "--g" : "--r"
+
+    const largeNumFormater = new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 0
+    });
+     
     return `
-    <div class="details-top">
-        <span>${this._data.name} (${this._data.symbol.toUpperCase()})</span>
-        <span>${this._data.price} </span> <span>${this._data.name} </span>
-        <li>${this._data.ath} </li>
-        <li>${this._data.fromAthPerc} </li>
+    <div class="crypto-details__top">
+        <span class="crypto-details__top__name">${this._data.name} (${this._data.symbol.toUpperCase()})</span>
+        <div class="crypto-details__top__price">
+          <span class="crypto-details__top__price__value">$${this._data.price}</span>
+          <span class="crypto-details__top__price__perc${percClass}">(${this._data.priceChangePerc > 0 ?  ["+",this._data.priceChangePerc.toFixed(2)].join("") : this._data.priceChangePerc.toFixed(2)}%)</span>
+        </div>
     </div>
-    <div class="details-bottom">
+    <div class="crypto-details__bottom">
+        <li>ATH: ${this._data.ath} </li>
+        ${this._data.fromAthPerc < 0 ? `<li>From ATH:  ${this._data.fromAthPerc.toFixed(2)}%</li> ` : "" }
        
-        <li>${this._data.marketCap}</li>
-        <li>${this._data.volume24h}</li>
+        <li classname="${percClass}">${largeNumFormater.format(this._data.marketCap)}</li>
+        <li>Market Cap: ${largeNumFormater.format(this._data.volume24h)} (#${this._data.rank})</li>
         <li>${this._data.circulatingSupply}</li>
         <li>${this._data.totalSupply ? this._data.totalSupply : "-"}</li>
        
