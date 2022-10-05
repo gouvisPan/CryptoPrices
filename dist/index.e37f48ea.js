@@ -540,6 +540,8 @@ var _detailView = require("./views/detailView");
 var _detailViewDefault = parcelHelpers.interopDefault(_detailView);
 var _paginationView = require("./views/paginationView");
 var _paginationViewDefault = parcelHelpers.interopDefault(_paginationView);
+var _searchView = require("./views/searchView");
+var _searchViewDefault = parcelHelpers.interopDefault(_searchView);
 // const timeout = function (s) {
 //   return new Promise(function (_, reject) {
 //     setTimeout(function () {
@@ -547,13 +549,14 @@ var _paginationViewDefault = parcelHelpers.interopDefault(_paginationView);
 //     }, s * 1000);
 //   });
 // };
-const controlSearch = async function() {
+const controlList = async function() {
     try {
         (0, _cryptoListViewDefault.default).renderSpinner();
         await _model.fetchCryptoInfo();
         (0, _cryptoListViewDefault.default).render(_model.getCryptoPage());
         (0, _paginationViewDefault.default).render(_model.state.search);
-        (0, _detailViewDefault.default).render(_model.state.search.cryptoInfo[0]);
+        console.log(_model.state.activeCoin);
+        (0, _detailViewDefault.default).render(_model.state.activeCoin);
     } catch (err) {
         console.log(err);
     }
@@ -567,20 +570,34 @@ const goToPage = function(page) {
     (0, _cryptoListViewDefault.default).render(_model.getCryptoPage(page));
     (0, _paginationViewDefault.default).render(_model.state.search);
 };
+const controlSearch = async function() {
+    try {
+        (0, _detailViewDefault.default).renderSpinner();
+        const query = (0, _searchViewDefault.default).getQuery();
+        await _model.searchCrypto(query);
+        console.log(_model.state.activeCoin);
+        (0, _detailViewDefault.default).render(_model.state.activeCoin);
+    } catch (err) {
+        console.log(err);
+    }
+};
 const init = function() {
     (0, _detailViewDefault.default).addHandlerDetails(controlDetails);
     (0, _paginationViewDefault.default).addHandlerPageChange(goToPage);
+    (0, _searchViewDefault.default).addHandlerSearch(controlSearch);
 };
-controlSearch();
+controlList();
 init();
+_model.searchCrypto("ethereum");
 
-},{"./model":"Y4A21","./views/cryptoListView":"6oqzW","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./views/detailView":"bES77","./views/paginationView":"6z7bi"}],"Y4A21":[function(require,module,exports) {
+},{"./model":"Y4A21","./views/cryptoListView":"6oqzW","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./views/detailView":"bES77","./views/paginationView":"6z7bi","./views/searchView":"9OQAM"}],"Y4A21":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "state", ()=>state);
 parcelHelpers.export(exports, "fetchCryptoInfo", ()=>fetchCryptoInfo);
 parcelHelpers.export(exports, "loadCoinDetails", ()=>loadCoinDetails);
 parcelHelpers.export(exports, "getCryptoPage", ()=>getCryptoPage);
+parcelHelpers.export(exports, "searchCrypto", ()=>searchCrypto);
 var _helpers = require("../js/helpers");
 var _config = require("./config");
 const state = {
@@ -594,10 +611,11 @@ const state = {
 const fetchCryptoInfo = async function() {
     try {
         const data = await (0, _helpers.getJSON)(`${(0, _config.API_BASE_URL)}${(0, _config.API_100_LARGEST_URL)}`);
-        this.state.search.cryptoInfo = data.map((coin)=>({
+        state.search.cryptoInfo = data.map((coin)=>({
                 id: coin.id,
                 symbol: coin.symbol,
                 marketCap: coin.market_cap,
+                img: coin.image,
                 name: coin.name,
                 price: coin.current_price,
                 priceChangePerc: coin.price_change_percentage_24h,
@@ -608,8 +626,10 @@ const fetchCryptoInfo = async function() {
                 ath: coin.ath,
                 fromAthPerc: coin.ath_change_percentage
             }));
+        state.activeCoin = state.search.cryptoInfo[0];
     } catch (err) {
         console.log(err);
+        throw err;
     }
 };
 const loadCoinDetails = function(id) {
@@ -621,6 +641,31 @@ const getCryptoPage = function(page = state.search.currentPage) {
     const last = page * state.search.resultsPerPage;
     return state.search.cryptoInfo.slice(first, last);
 };
+const searchCrypto = async function(query) {
+    try {
+        const coin = await (0, _helpers.getJSON)(`${(0, _config.API_BASE_URL)}coins/${query}`);
+        console.log(coin);
+        state.activeCoin = {
+            id: coin.id,
+            symbol: coin.symbol,
+            marketCap: coin.market_data.market_cap.usd,
+            img: coin.image.large,
+            name: coin.name,
+            price: coin.market_data.current_price.usd,
+            priceChangePerc: coin.market_data.price_change_percentage_24h,
+            volume24h: coin.market_data.total_volume.usd,
+            rank: coin.market_cap_rank,
+            circulatingSupply: coin.market_data.circulating_supply,
+            totalSupply: coin.market_data.max_supply,
+            ath: coin.market_data.ath.usd,
+            fromAthPerc: coin.market_data.ath_change_percentage.usd
+        };
+        console.log(state.activeCoin);
+    } catch (err) {
+        console.log(err);
+        throw err;
+    }
+};
 
 },{"../js/helpers":"hGI1E","./config":"k5Hzs","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"hGI1E":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -630,6 +675,7 @@ parcelHelpers.export(exports, "filterCryptos", ()=>filterCryptos);
 var _config = require("./config");
 const getJSON = async function(url) {
     try {
+        console.log(url);
         const res = await fetch(url);
         const data = await res.json();
         if (!res.ok) throw new Error(`${data.message} (${res.status})`);
@@ -679,18 +725,9 @@ parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "API_100_LARGEST_URL", ()=>API_100_LARGEST_URL);
 parcelHelpers.export(exports, "API_BASE_URL", ()=>API_BASE_URL);
 parcelHelpers.export(exports, "RESULTS_PER_PAGE", ()=>RESULTS_PER_PAGE);
-parcelHelpers.export(exports, "CRYPTOS_OF_INTEREST", ()=>CRYPTOS_OF_INTEREST);
 const API_100_LARGEST_URL = "coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false'";
 const API_BASE_URL = "https://api.coingecko.com/api/v3/";
-const RESULTS_PER_PAGE = 10;
-const CRYPTOS_OF_INTEREST = [
-    "BTC",
-    "ETH",
-    "BNB",
-    "ADA",
-    "XRP",
-    "SOL"
-]; // export const API_BASE_URL = "https://api.binance.com";
+const RESULTS_PER_PAGE = 10; // export const API_BASE_URL = "https://api.binance.com";
  // export const API_AVG_PRICE_URL = "/api/v3/ticker/24hr";
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"6oqzW":[function(require,module,exports) {
@@ -702,26 +739,44 @@ class CryptoListView extends (0, _viewDefault.default) {
     _parentEl = document.querySelector(".results");
     _errorMessage = "Could not match any coin/token to your search... Please try with a different query!";
     _generateMarkup() {
-        return this._data.map((d)=>{
-            return ` <li class="preview">
-                    <a class="preview__link preview__link--active" href="#${d.id}">
-                    <div class="preview__data">
-                        <h4 class="preview__title">${d.name}</h4>
-                        <p class="preview__publisher">${d.price}</p>
-                        <div class="preview__user-generated">
-                        </div>
-                    </div>
-                    </a>
-                 </li>`;
-        });
+        return [
+            `<li class="preview">
+    <div class="preview__data">
+        <div class="preview__rank ">Rank</div>
+      
+        <h4 class="preview__name preview__head-coin">Coin/Token</h4>
+       
+        <p class="preview__price preview__head-price">Price</p>
+
+    </div>
+    </a>
+ </li>`,
+            this._data.map((d)=>{
+                return `<li class="preview">
+      <a class="preview__link preview__link--active" href="#${d.id}">
+      <div class="preview__data">
+          <div class="preview__rank">${d.rank}</div>
+          <div class="preview__title"> 
+            <img class="preview__img" src="${d.img}"/>
+            <h4 class="preview__name">${d.name}</h4>
+            <h2 class="preview__symbol">(${d.symbol.toUpperCase()})</h2>
+          </div>
+          <p class="preview__price">$${d.price}</p>
+
+      </div>
+      </a>
+   </li>`;
+            }).join(""), 
+        ].join("");
     }
 }
+// <img src=./node_modules/cryptocurrency-icons/svg/white/aave.svg/>${d.symbol.toLowerCase()}"/>
 exports.default = new CryptoListView();
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./view":"bWlJ9"}],"bWlJ9":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-var _iconsSvg = require("url:../../img/icons.svg");
+var _iconsSvg = require("../../img/icons.svg");
 var _iconsSvgDefault = parcelHelpers.interopDefault(_iconsSvg);
 class View {
     _data;
@@ -754,8 +809,8 @@ class View {
 }
 exports.default = View;
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","url:../../img/icons.svg":"loVOp"}],"loVOp":[function(require,module,exports) {
-module.exports = require("./helpers/bundle-url").getBundleURL("hWUTQ") + "icons.dfd7a6db.svg" + "?" + Date.now();
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../img/icons.svg":"cMpiy"}],"cMpiy":[function(require,module,exports) {
+module.exports = require("./helpers/bundle-url").getBundleURL("hWUTQ") + "icons.21bad73c.svg" + "?" + Date.now();
 
 },{"./helpers/bundle-url":"lgJ39"}],"lgJ39":[function(require,module,exports) {
 "use strict";
@@ -797,7 +852,7 @@ parcelHelpers.defineInteropFlag(exports);
 var _view = require("./view");
 var _viewDefault = parcelHelpers.interopDefault(_view);
 class DetailView extends (0, _viewDefault.default) {
-    _parentEl = document.querySelector(".crypto-details");
+    _parentEl = document.querySelector(".details");
     _errorMessage = "Did not find details for this item :(";
     loadCoinDetails(data) {
         console.log(data);
@@ -810,20 +865,46 @@ class DetailView extends (0, _viewDefault.default) {
         ].forEach((ev)=>window.addEventListener(ev, handler));
     }
     _generateMarkup() {
+        const percClass = this._data.priceChangePerc > 0 ? "--g" : "--r";
+        const largeNumFormater = new Intl.NumberFormat("en-US", {
+            style: "currency",
+            currency: "USD",
+            minimumFractionDigits: 0
+        });
         return `
-    <div class="details-top">
-        <span>${this._data.name} (${this._data.symbol.toUpperCase()})</span>
-        <span>${this._data.price} </span> <span>${this._data.name} </span>
-        <li>${this._data.ath} </li>
-        <li>${this._data.fromAthPerc} </li>
+    <div class="crypto-details__top">
+        <div class="crypto-details__top__header">
+        <img src="${this._data.img}" class="crypto-details__top__header__img"/>
+        <span class="crypto-details__top__header__name">${this._data.name} </span>
+        <span class="crypto-details__top__header__symbol">(${this._data.symbol.toUpperCase()})</span>
+        </div>
+        <div class="crypto-details__top__price">        
+          <span class="crypto-details__top__price__value">${largeNumFormater.format(this._data.price)}</span>
+          <span class="crypto-details__top__price__perc${percClass}">(${this._data.priceChangePerc > 0 ? [
+            "+",
+            this._data.priceChangePerc.toFixed(2)
+        ].join("") : this._data.priceChangePerc.toFixed(2)}%)</span>
+        </div>
     </div>
-    <div class="details-bottom">
-        <ul>
-        <li>${this._data.marketCap}</li>
-        <li>${this._data.volume24h}</li>
-        <li>${this._data.circulatingSupply}</li>
-        <li>${this._data.totalSupply ? this._data.totalSupply : "-"}</li>
-        </ul>
+    <div class="crypto-details__bottom">
+        <li class="crypto-details__bottom__fixed">ATH</li>
+        <li class="crypto-details__bottom__data">$${this._data.ath} </li>
+
+        ${this._data.fromAthPerc < 0 ? `<li class ="crypto-details__bottom__fixed">From ATH</li> ` : ""}
+        ${this._data.fromAthPerc < 0 ? `<li class="crypto-details__bottom__data">${this._data.fromAthPerc.toFixed(2)}%</li> ` : ""}
+       
+        <li class="crypto-details__bottom__fixed">Market Cap</li>
+        <li class="crypto-details__bottom__data">${largeNumFormater.format(this._data.marketCap)} (#${this._data.rank})</li>
+        
+        <li class="crypto-details__bottom__fixed">Volume 24h</li>
+        <li class="crypto-details__bottom__data">${largeNumFormater.format(this._data.volume24h)}</li>
+        
+        <li class="crypto-details__bottom__fixed">Circ. supply</li>
+        <li class="crypto-details__bottom__data">${this._data.circulatingSupply}</li>
+        
+        <li class="crypto-details__bottom__fixed">Total supply</li>
+        <li class="crypto-details__bottom__data">${this._data.totalSupply ? this._data.totalSupply : "-"}</li>
+       
     </div>
     `;
     }
@@ -855,32 +936,23 @@ class PaginationView extends (0, _viewDefault.default) {
         if (curPage === 1 && totalPages > 1) return `
     <button data-goto="${curPage + 1}" class="btn--inline  pagination__btn--next">
     <span>Page ${curPage + 1}</span>
-    <svg class="search__icon">
-      <use href="src/img/icons.svg#icon-arrow-right"></use>
-    </svg>
+ 
   </button> 
     `;
         if (totalPages > 1 && curPage === totalPages) return `
     <button data-goto="${curPage - 1}" class="btn--inline  pagination__btn--prev">
-            <svg class="search__icon">
-              <use href="src/img/icons.svg#icon-arrow-left"></use>
-            </svg>
-            <span>Page ${curPage - 1}</span>
+            <span>Page${curPage - 1}</span>
           </button>
     `;
         if (curPage < totalPages) return `
         <button data-goto="${curPage - 1}" class="btn--inline  pagination__btn--prev">
-            <svg class="search__icon">
-              <use href="src/img/icons.svg#icon-arrow-left"></use>
-            </svg>
+         
             <span>Page ${curPage - 1}</span>
           </button>
 
           <button data-goto="${curPage + 1}" class="btn--inline  pagination__btn--next">
             <span>Page ${curPage + 1}</span>
-            <svg class="search__icon">
-              <use href="src/img/icons.svg#icon-arrow-right"></use>
-            </svg>
+    
           </button> 
     `;
         return ``;
@@ -888,6 +960,28 @@ class PaginationView extends (0, _viewDefault.default) {
 }
 exports.default = new PaginationView();
 
-},{"./view":"bWlJ9","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["fA0o9","aenu9"], "aenu9", "parcelRequirec944")
+},{"./view":"bWlJ9","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"9OQAM":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+class SearchView {
+    _parentElement = document.querySelector(".search");
+    getQuery() {
+        const input = this._parentElement.querySelector(".search__field").value;
+        this._clearInput();
+        return input;
+    }
+    addHandlerSearch(handler) {
+        this._parentElement.addEventListener("submit", function(e) {
+            e.preventDefault();
+            handler();
+        });
+    }
+    _clearInput() {
+        this._parentElement.querySelector(".search__field").value = "";
+    }
+}
+exports.default = new SearchView();
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["fA0o9","aenu9"], "aenu9", "parcelRequirec944")
 
 //# sourceMappingURL=index.e37f48ea.js.map

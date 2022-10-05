@@ -1,11 +1,11 @@
 .search-results {
-  padding: 1rem 2rem;
+  padding: 4rem 6rem 1rem 2rem;
   display: flex;
   flex-direction: column;
   background-color: $color-grey-light-1;
 }
 
-.results{
+.results {
   list-style: none;
 }
 
@@ -20,7 +20,6 @@
   }
 
   &__btn {
-   
     &--prev {
       float: left;
     }

@@ -2,6 +2,7 @@ import * as model from "./model";
 import cryptoListView from "./views/cryptoListView";
 import detailView from "./views/detailView";
 import paginationView from "./views/paginationView";
+import searchView from "./views/searchView";
 
 // const timeout = function (s) {
 //   return new Promise(function (_, reject) {
@@ -11,7 +12,7 @@ import paginationView from "./views/paginationView";
 //   });
 // };
 
-const controlSearch = async function () {
+const controlList = async function () {
   try {
     cryptoListView.renderSpinner();
 
@@ -20,7 +21,8 @@ const controlSearch = async function () {
     cryptoListView.render(model.getCryptoPage());
     paginationView.render(model.state.search);
 
-    detailView.render(model.state.search.cryptoInfo[0]);
+    console.log(model.state.activeCoin);
+    detailView.render(model.state.activeCoin);
   } catch (err) {
     console.log(err);
   }
@@ -38,10 +40,28 @@ const goToPage = function (page) {
   paginationView.render(model.state.search);
 };
 
+const controlSearch = async function () {
+  try {
+    detailView.renderSpinner();
+
+    const query = searchView.getQuery();
+
+    await model.searchCrypto(query);
+
+    console.log(model.state.activeCoin);
+    detailView.render(model.state.activeCoin);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 const init = function () {
   detailView.addHandlerDetails(controlDetails);
   paginationView.addHandlerPageChange(goToPage);
+  searchView.addHandlerSearch(controlSearch);
 };
 
-controlSearch();
+controlList();
 init();
+
+model.searchCrypto("ethereum");

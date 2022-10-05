@@ -1,7 +1,7 @@
 import View from "./view";
 
 class DetailView extends View {
-  _parentEl = document.querySelector(".crypto-details");
+  _parentEl = document.querySelector(".details");
   _errorMessage = "Did not find details for this item :(";
 
   loadCoinDetails(data) {
@@ -16,36 +16,70 @@ class DetailView extends View {
   }
 
   _generateMarkup() {
-    const  percClass=
-    this._data.priceChangePerc > 0 ? "--g" : "--r"
+    const percClass = this._data.priceChangePerc > 0 ? "--g" : "--r";
 
-    const largeNumFormater = new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 0
+    const largeNumFormater = new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+      minimumFractionDigits: 0,
     });
-     
+
     return `
     <div class="crypto-details__top">
-        <span class="crypto-details__top__name">${this._data.name} (${this._data.symbol.toUpperCase()})</span>
-        <div class="crypto-details__top__price">
-          <span class="crypto-details__top__price__value">$${this._data.price}</span>
-          <span class="crypto-details__top__price__perc${percClass}">(${this._data.priceChangePerc > 0 ?  ["+",this._data.priceChangePerc.toFixed(2)].join("") : this._data.priceChangePerc.toFixed(2)}%)</span>
+        <div class="crypto-details__top__header">
+        <img src="${this._data.img}" class="crypto-details__top__header__img"/>
+        <span class="crypto-details__top__header__name">${
+          this._data.name
+        } </span>
+        <span class="crypto-details__top__header__symbol">(${this._data.symbol.toUpperCase()})</span>
+        </div>
+        <div class="crypto-details__top__price">        
+          <span class="crypto-details__top__price__value">${largeNumFormater.format(
+            this._data.price
+          )}</span>
+          <span class="crypto-details__top__price__perc${percClass}">(${
+      this._data.priceChangePerc > 0
+        ? ["+", this._data.priceChangePerc.toFixed(2)].join("")
+        : this._data.priceChangePerc.toFixed(2)
+    }%)</span>
         </div>
     </div>
     <div class="crypto-details__bottom">
-        <li class="crypto-details__bottom__fixed">ATH:</li>
-        <li class="crypto-details__bottom__data">${this._data.ath} </li>
+        <li class="crypto-details__bottom__fixed">ATH</li>
+        <li class="crypto-details__bottom__data">$${this._data.ath} </li>
 
-        ${this._data.fromAthPerc < 0 ? `<li class ="crypto-details__bottom__fixed">From ATH:</li> ` : "" }
-        ${this._data.fromAthPerc < 0 ? `<li class="crypto-details__bottom__data">${this._data.fromAthPerc.toFixed(2)}%</li> ` : "" }
+        ${
+          this._data.fromAthPerc < 0
+            ? `<li class ="crypto-details__bottom__fixed">From ATH</li> `
+            : ""
+        }
+        ${
+          this._data.fromAthPerc < 0
+            ? `<li class="crypto-details__bottom__data">${this._data.fromAthPerc.toFixed(
+                2
+              )}%</li> `
+            : ""
+        }
        
-        <li class="crypto-details__bottom__fixed">Market Cap:</li>
-        <li class="crypto-details__bottom__data">${largeNumFormater.format(this._data.marketCap)}</li>
+        <li class="crypto-details__bottom__fixed">Market Cap</li>
+        <li class="crypto-details__bottom__data">${largeNumFormater.format(
+          this._data.marketCap
+        )} (#${this._data.rank})</li>
         
-        <li>${largeNumFormater.format(this._data.volume24h)} (#${this._data.rank})</li>
-        <li>${this._data.circulatingSupply}</li>
-        <li>${this._data.totalSupply ? this._data.totalSupply : "-"}</li>
+        <li class="crypto-details__bottom__fixed">Volume 24h</li>
+        <li class="crypto-details__bottom__data">${largeNumFormater.format(
+          this._data.volume24h
+        )}</li>
+        
+        <li class="crypto-details__bottom__fixed">Circ. supply</li>
+        <li class="crypto-details__bottom__data">${
+          this._data.circulatingSupply
+        }</li>
+        
+        <li class="crypto-details__bottom__fixed">Total supply</li>
+        <li class="crypto-details__bottom__data">${
+          this._data.totalSupply ? this._data.totalSupply : "-"
+        }</li>
        
     </div>
     `;

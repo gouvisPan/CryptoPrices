@@ -2,6 +2,7 @@ import { CRYPTOS_OF_INTEREST } from "./config";
 
 export const getJSON = async function (url) {
   try {
+    console.log(url);
     const res = await fetch(url);
     const data = await res.json();
 

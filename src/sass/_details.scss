@@ -1,69 +1,86 @@
 .crypto-details {
   background-color: $color-grey-light-1;
+  padding-top: 3rem;
   padding-left: 2rem;
   list-style: none;
   color: $color-white;
-  
-  &__top{
+
+  &__top {
     display: flex;
     flex-direction: column;
- 
+    gap: 0.7rem;
 
-  &__name{
-    font-size: 3rem;
-    font-weight: 700;
-  }
+    &__header {
+      display: flex;
+      gap: 0.4rem;
 
-  &__price{
-    display: flex;
-    gap: .7rem;
-    
-
-    &__value{
-      font-size: 3rem;
-      font-weight: 500;
-      
-    }
-
-    &__perc{
-      
-      &--g{
-          color:rgba(23, 151, 23, 0.849);
-          font-size: 2rem;
-          font-weight: 600;
-          align-self: center;
-      }
-
-      &--r{
-        color:rgb(211, 48, 48);
-        font-size: 2rem;
-        font-weight: 600;
+      &__name {
+        font-size: 2.6rem;
+        font-weight: 700;
         align-self: center;
       }
+      &__symbol {
+        font-size: 2.6rem;
+        font-weight: 800;
+        align-self: center;
+      }
+      &__img {
+        margin-right: 0.5rem;
+        height: 5rem;
+      }
+    }
+
+    &__price {
+      display: flex;
+      gap: 0.7rem;
+
+      &__value {
+        font-size: 3rem;
+        font-weight: 600;
+      }
+
+      &__perc {
+        &--g {
+          color: rgba(23, 151, 23, 0.849);
+          font-size: 2rem;
+          font-weight: 800;
+          letter-spacing: 0.6px;
+          align-self: center;
+        }
+
+        &--r {
+          color: rgb(211, 48, 48);
+          font-size: 2rem;
+          font-weight: 800;
+          letter-spacing: 0.6px;
+          align-self: center;
+        }
+      }
     }
   }
-}
-  &__bottom{
+  &__bottom {
+    width: 95%;
     display: grid;
     grid-template-columns: repeat(2, minmax(18em, 1fr));
-   
+    row-gap: 1rem;
+    margin-top: 2rem;
 
-    &__fixed{
+    &__fixed {
       font-size: 1.35rem;
-      color:$color-grey-dark-2;
+      color: $color-grey-dark-2;
       font-weight: 600;
     }
 
-    &__data{
-      font-size: 2rem;
+    &__data {
+      font-size: 1.6rem;
       font-weight: 600;
     }
   }
-  .--g{
-    color:green;
+  .--g {
+    color: green;
   }
 
-  .--r{
-    color:green;
+  .--r {
+    color: green;
   }
 }
