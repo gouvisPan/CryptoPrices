@@ -16,7 +16,7 @@
 
   &__price{
     display: flex;
-    gap: 2rem;
+    gap: .7rem;
     
 
     &__value{
@@ -29,22 +29,22 @@
       
       &--g{
           color:rgba(23, 151, 23, 0.849);
-          font-size: 1.5rem;
-          font-weight: 500;
+          font-size: 2rem;
+          font-weight: 600;
           align-self: center;
       }
 
       &--r{
         color:rgb(211, 48, 48);
-        font-size: 1.5rem;
-        font-weight: 500;
+        font-size: 2rem;
+        font-weight: 600;
         align-self: center;
       }
     }
   }
 }
   &__bottom{
-    display: flex;
+    display: grid;
     flex-direction: column;
 
     li{

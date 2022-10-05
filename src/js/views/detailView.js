@@ -34,11 +34,16 @@ class DetailView extends View {
         </div>
     </div>
     <div class="crypto-details__bottom">
-        <li>ATH: ${this._data.ath} </li>
-        ${this._data.fromAthPerc < 0 ? `<li>From ATH:  ${this._data.fromAthPerc.toFixed(2)}%</li> ` : "" }
+        <li class="crypto-details__bottom_fixed">ATH:</li>
+        <li class="crypto-details__bottom_data">${this._data.ath} </li>
+
+        ${this._data.fromAthPerc < 0 ? `<li class ="crypto-details__bottom_fixed">From ATH:</li> ` : "" }
+        ${this._data.fromAthPerc < 0 ? `<li class="crypto-details__bottom_data">${this._data.fromAthPerc.toFixed(2)}%</li> ` : "" }
        
-        <li classname="${percClass}">${largeNumFormater.format(this._data.marketCap)}</li>
-        <li>Market Cap: ${largeNumFormater.format(this._data.volume24h)} (#${this._data.rank})</li>
+        <li classname="crypto-details__bottom_fixed">Market Cap:</li>
+        <li classname="crypto-details__bottom_data">${largeNumFormater.format(this._data.marketCap)}</li>
+        
+        <li>${largeNumFormater.format(this._data.volume24h)} (#${this._data.rank})</li>
         <li>${this._data.circulatingSupply}</li>
         <li>${this._data.totalSupply ? this._data.totalSupply : "-"}</li>
        
