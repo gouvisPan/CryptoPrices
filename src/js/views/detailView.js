@@ -34,14 +34,14 @@ class DetailView extends View {
         </div>
     </div>
     <div class="crypto-details__bottom">
-        <li class="crypto-details__bottom_fixed">ATH:</li>
-        <li class="crypto-details__bottom_data">${this._data.ath} </li>
+        <li class="crypto-details__bottom__fixed">ATH:</li>
+        <li class="crypto-details__bottom__data">${this._data.ath} </li>
 
-        ${this._data.fromAthPerc < 0 ? `<li class ="crypto-details__bottom_fixed">From ATH:</li> ` : "" }
-        ${this._data.fromAthPerc < 0 ? `<li class="crypto-details__bottom_data">${this._data.fromAthPerc.toFixed(2)}%</li> ` : "" }
+        ${this._data.fromAthPerc < 0 ? `<li class ="crypto-details__bottom__fixed">From ATH:</li> ` : "" }
+        ${this._data.fromAthPerc < 0 ? `<li class="crypto-details__bottom__data">${this._data.fromAthPerc.toFixed(2)}%</li> ` : "" }
        
-        <li classname="crypto-details__bottom_fixed">Market Cap:</li>
-        <li classname="crypto-details__bottom_data">${largeNumFormater.format(this._data.marketCap)}</li>
+        <li class="crypto-details__bottom__fixed">Market Cap:</li>
+        <li class="crypto-details__bottom__data">${largeNumFormater.format(this._data.marketCap)}</li>
         
         <li>${largeNumFormater.format(this._data.volume24h)} (#${this._data.rank})</li>
         <li>${this._data.circulatingSupply}</li>
