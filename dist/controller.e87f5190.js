@@ -123,17 +123,15 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.RESULTS_PER_PAGE = exports.CRYPTOS_OF_INTEREST = exports.API_BASE_URL = exports.API_100_LARGEST_URL = void 0;
+exports.RESULTS_PER_PAGE = exports.API_BASE_URL = exports.API_100_LARGEST_URL = void 0;
 var API_100_LARGEST_URL = "coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false'";
 exports.API_100_LARGEST_URL = API_100_LARGEST_URL;
 var API_BASE_URL = "https://api.coingecko.com/api/v3/";
 exports.API_BASE_URL = API_BASE_URL;
-var RESULTS_PER_PAGE = 10;
-exports.RESULTS_PER_PAGE = RESULTS_PER_PAGE;
-var CRYPTOS_OF_INTEREST = ["BTC", "ETH", "BNB", "ADA", "XRP", "SOL"]; // export const API_BASE_URL = "https://api.binance.com";
+var RESULTS_PER_PAGE = 10; // export const API_BASE_URL = "https://api.binance.com";
 // export const API_AVG_PRICE_URL = "/api/v3/ticker/24hr";
 
-exports.CRYPTOS_OF_INTEREST = CRYPTOS_OF_INTEREST;
+exports.RESULTS_PER_PAGE = RESULTS_PER_PAGE;
 },{}],"src/js/helpers.js":[function(require,module,exports) {
 "use strict";
 
@@ -160,38 +158,39 @@ var getJSON = /*#__PURE__*/function () {
         switch (_context.prev = _context.next) {
           case 0:
             _context.prev = 0;
-            _context.next = 3;
+            console.log(url);
+            _context.next = 4;
             return fetch(url);
 
-          case 3:
+          case 4:
             res = _context.sent;
-            _context.next = 6;
+            _context.next = 7;
             return res.json();
 
-          case 6:
+          case 7:
             data = _context.sent;
 
             if (res.ok) {
-              _context.next = 9;
+              _context.next = 10;
               break;
             }
 
             throw new Error("".concat(data.message, " (").concat(res.status, ")"));
 
-          case 9:
+          case 10:
             return _context.abrupt("return", data);
 
-          case 12:
-            _context.prev = 12;
+          case 13:
+            _context.prev = 13;
             _context.t0 = _context["catch"](0);
             throw _context.t0;
 
-          case 15:
+          case 16:
           case "end":
             return _context.stop();
         }
       }
-    }, _callee, null, [[0, 12]]);
+    }, _callee, null, [[0, 13]]);
   }));
 
   return function getJSON(_x) {
@@ -217,7 +216,7 @@ exports.filterCryptos = filterCryptos;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.state = exports.loadCoinDetails = exports.getCryptoPage = exports.fetchCryptoInfo = void 0;
+exports.state = exports.searchCrypto = exports.loadCoinDetails = exports.getCryptoPage = exports.fetchCryptoInfo = exports.addFavorite = void 0;
 
 var _helpers = require("../js/helpers");
 
@@ -237,7 +236,8 @@ var state = {
     resultsPerPage: _config.RESULTS_PER_PAGE,
     currentPage: 1
   },
-  activeCoin: {}
+  activeCoin: {},
+  favorites: []
 };
 exports.state = state;
 
@@ -254,11 +254,12 @@ var fetchCryptoInfo = /*#__PURE__*/function () {
 
           case 3:
             data = _context.sent;
-            this.state.search.cryptoInfo = data.map(function (coin) {
+            state.search.cryptoInfo = data.map(function (coin) {
               return {
                 id: coin.id,
                 symbol: coin.symbol,
                 marketCap: coin.market_cap,
+                img: coin.image,
                 name: coin.name,
                 price: coin.current_price,
                 priceChangePerc: coin.price_change_percentage_24h,
@@ -270,20 +271,22 @@ var fetchCryptoInfo = /*#__PURE__*/function () {
                 fromAthPerc: coin.ath_change_percentage
               };
             });
-            _context.next = 10;
+            state.activeCoin = state.search.cryptoInfo[0];
+            _context.next = 12;
             break;
 
-          case 7:
-            _context.prev = 7;
+          case 8:
+            _context.prev = 8;
             _context.t0 = _context["catch"](0);
             console.log(_context.t0);
+            throw _context.t0;
 
-          case 10:
+          case 12:
           case "end":
             return _context.stop();
         }
       }
-    }, _callee, this, [[0, 7]]);
+    }, _callee, null, [[0, 8]]);
   }));
 
   return function fetchCryptoInfo() {
@@ -310,6 +313,68 @@ var getCryptoPage = function getCryptoPage() {
 };
 
 exports.getCryptoPage = getCryptoPage;
+
+var searchCrypto = /*#__PURE__*/function () {
+  var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(query) {
+    var coin;
+    return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            _context2.prev = 0;
+            _context2.next = 3;
+            return (0, _helpers.getJSON)("".concat(_config.API_BASE_URL, "coins/").concat(query));
+
+          case 3:
+            coin = _context2.sent;
+            console.log(coin);
+            state.activeCoin = {
+              id: coin.id,
+              symbol: coin.symbol,
+              marketCap: coin.market_data.market_cap.usd,
+              img: coin.image.large,
+              name: coin.name,
+              price: coin.market_data.current_price.usd,
+              priceChangePerc: coin.market_data.price_change_percentage_24h,
+              volume24h: coin.market_data.total_volume.usd,
+              rank: coin.market_cap_rank,
+              circulatingSupply: coin.market_data.circulating_supply,
+              totalSupply: coin.market_data.max_supply,
+              ath: coin.market_data.ath.usd,
+              fromAthPerc: coin.market_data.ath_change_percentage.usd,
+              bookmark: false
+            };
+            console.log(state.activeCoin);
+            _context2.next = 13;
+            break;
+
+          case 9:
+            _context2.prev = 9;
+            _context2.t0 = _context2["catch"](0);
+            console.log(_context2.t0);
+            throw _context2.t0;
+
+          case 13:
+          case "end":
+            return _context2.stop();
+        }
+      }
+    }, _callee2, null, [[0, 9]]);
+  }));
+
+  return function searchCrypto(_x) {
+    return _ref2.apply(this, arguments);
+  };
+}();
+
+exports.searchCrypto = searchCrypto;
+
+var addFavorite = function addFavorite() {
+  state.activeCoin.bookmark = true;
+  state.favorites.push(state.activeCoin);
+};
+
+exports.addFavorite = addFavorite;
 },{"../js/helpers":"src/js/helpers.js","./config":"src/js/config.js"}],"src/img/icons.svg":[function(require,module,exports) {
 module.exports = "/icons.ae3c38d5.svg";
 },{}],"src/js/views/view.js":[function(require,module,exports) {
@@ -443,7 +508,7 @@ var CryptoListView = /*#__PURE__*/function (_View) {
     key: "_generateMarkup",
     value: function _generateMarkup() {
       return ["<li class=\"preview\">\n    <div class=\"preview__data\">\n        <div class=\"preview__rank \">Rank</div>\n      \n        <h4 class=\"preview__name preview__head-coin\">Coin/Token</h4>\n       \n        <p class=\"preview__price preview__head-price\">Price</p>\n\n    </div>\n    </a>\n </li>", this._data.map(function (d) {
-        return "<li class=\"preview\">\n      <a class=\"preview__link preview__link--active\" href=\"#".concat(d.id, "\">\n      <div class=\"preview__data\">\n          <div class=\"preview__rank\">").concat(d.rank, "</div>\n          <div class=\"preview__title\"> \n            <h4 class=\"preview__name\">").concat(d.name, "</h4>\n            <h2 class=\"preview__symbol\">(").concat(d.symbol.toUpperCase(), ")</h2>\n          </div>\n          <p class=\"preview__price\">$").concat(d.price, "</p>\n\n      </div>\n      </a>\n   </li>");
+        return "<li class=\"preview\">\n      <a class=\"preview__link preview__link--active\" href=\"#".concat(d.id, "\">\n      <div class=\"preview__data\">\n          <div class=\"preview__rank\">").concat(d.rank, "</div>\n          <div class=\"preview__title\"> \n            <img class=\"preview__img\" src=\"").concat(d.img, "\"/>\n            <h4 class=\"preview__name\">").concat(d.name, "</h4>\n            <h2 class=\"preview__symbol\">(").concat(d.symbol.toUpperCase(), ")</h2>\n          </div>\n          <p class=\"preview__price\">$").concat(d.price, "</p>\n\n      </div>\n      </a>\n   </li>");
       }).join("")].join("");
     }
   }]);
@@ -455,7 +520,9 @@ var CryptoListView = /*#__PURE__*/function (_View) {
 var _default = new CryptoListView();
 
 exports.default = _default;
-},{"./view":"src/js/views/view.js"}],"src/js/views/detailView.js":[function(require,module,exports) {
+},{"./view":"src/js/views/view.js"}],"src/img/favicon.png":[function(require,module,exports) {
+module.exports = "/favicon.beecaf59.png";
+},{}],"src/js/views/detailView.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -464,6 +531,8 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = void 0;
 
 var _view = _interopRequireDefault(require("./view"));
+
+var _favicon = _interopRequireDefault(require("../../img/favicon.png"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -507,7 +576,7 @@ var DetailView = /*#__PURE__*/function (_View) {
 
     _this = _super.call.apply(_super, [this].concat(args));
 
-    _defineProperty(_assertThisInitialized(_this), "_parentEl", document.querySelector(".crypto-details"));
+    _defineProperty(_assertThisInitialized(_this), "_parentEl", document.querySelector(".details"));
 
     _defineProperty(_assertThisInitialized(_this), "_errorMessage", "Did not find details for this item :(");
 
@@ -528,15 +597,22 @@ var DetailView = /*#__PURE__*/function (_View) {
       });
     }
   }, {
+    key: "addHandlerAddFavorite",
+    value: function addHandlerAddFavorite(handler) {
+      this._parentEl.addEventListener("click", function (e) {
+        var btn = e.target.closest();
+      });
+    }
+  }, {
     key: "_generateMarkup",
     value: function _generateMarkup() {
       var percClass = this._data.priceChangePerc > 0 ? "--g" : "--r";
-      var largeNumFormater = new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD',
+      var largeNumFormater = new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
         minimumFractionDigits: 0
       });
-      return "\n    <div class=\"crypto-details__top\">\n        <span class=\"crypto-details__top__name\">".concat(this._data.name, " (").concat(this._data.symbol.toUpperCase(), ")</span>\n        <div class=\"crypto-details__top__price\">\n          <span class=\"crypto-details__top__price__value\">$").concat(this._data.price, "</span>\n          <span class=\"crypto-details__top__price__perc").concat(percClass, "\">(").concat(this._data.priceChangePerc > 0 ? ["+", this._data.priceChangePerc.toFixed(2)].join("") : this._data.priceChangePerc.toFixed(2), "%)</span>\n        </div>\n    </div>\n    <div class=\"crypto-details__bottom\">\n        <li class=\"crypto-details__bottom__fixed\">ATH:</li>\n        <li class=\"crypto-details__bottom__data\">").concat(this._data.ath, " </li>\n\n        ").concat(this._data.fromAthPerc < 0 ? "<li class =\"crypto-details__bottom__fixed\">From ATH:</li> " : "", "\n        ").concat(this._data.fromAthPerc < 0 ? "<li class=\"crypto-details__bottom__data\">".concat(this._data.fromAthPerc.toFixed(2), "%</li> ") : "", "\n       \n        <li class=\"crypto-details__bottom__fixed\">Market Cap:</li>\n        <li class=\"crypto-details__bottom__data\">").concat(largeNumFormater.format(this._data.marketCap), "</li>\n        \n        <li>").concat(largeNumFormater.format(this._data.volume24h), " (#").concat(this._data.rank, ")</li>\n        <li>").concat(this._data.circulatingSupply, "</li>\n        <li>").concat(this._data.totalSupply ? this._data.totalSupply : "-", "</li>\n       \n    </div>\n    ");
+      return "\n    <div class=\"crypto-details__top\">\n        <div class=\"crypto-details__top__header\">\n        <img src=\"".concat(this._data.img, "\" class=\"crypto-details__top__header__img\"/>\n        <span class=\"crypto-details__top__header__name\">").concat(this._data.name, " </span>\n        <span class=\"crypto-details__top__header__symbol\">(").concat(this._data.symbol.toUpperCase(), ")</span>\n        <img src = \"").concat(_favicon.default, "\" class=\"crypto-details__top__header__fav\"/>\n        </div>\n        <div class=\"crypto-details__top__price\">        \n          <span class=\"crypto-details__top__price__value\">").concat(largeNumFormater.format(this._data.price), "</span>\n          <span class=\"crypto-details__top__price__perc").concat(percClass, "\">(").concat(this._data.priceChangePerc > 0 ? ["+", this._data.priceChangePerc.toFixed(2)].join("") : this._data.priceChangePerc.toFixed(2), "%)</span>\n        </div>\n    </div>\n    <div class=\"crypto-details__bottom\">\n        <li class=\"crypto-details__bottom__fixed\">ATH</li>\n        <li class=\"crypto-details__bottom__data\">$").concat(this._data.ath, " </li>\n\n        ").concat(this._data.fromAthPerc < 0 ? "<li class =\"crypto-details__bottom__fixed\">From ATH</li> " : "", "\n        ").concat(this._data.fromAthPerc < 0 ? "<li class=\"crypto-details__bottom__data\">".concat(this._data.fromAthPerc.toFixed(2), "%</li> ") : "", "\n       \n        <li class=\"crypto-details__bottom__fixed\">Market Cap</li>\n        <li class=\"crypto-details__bottom__data\">").concat(largeNumFormater.format(this._data.marketCap), " (#").concat(this._data.rank, ")</li>\n        \n        <li class=\"crypto-details__bottom__fixed\">Volume 24h</li>\n        <li class=\"crypto-details__bottom__data\">").concat(largeNumFormater.format(this._data.volume24h), "</li>\n        \n        <li class=\"crypto-details__bottom__fixed\">Circ. supply</li>\n        <li class=\"crypto-details__bottom__data\">").concat(this._data.circulatingSupply, "</li>\n        \n        <li class=\"crypto-details__bottom__fixed\">Total supply</li>\n        <li class=\"crypto-details__bottom__data\">").concat(this._data.totalSupply ? this._data.totalSupply : "-", "</li>\n       \n    </div>\n    ");
     }
   }]);
 
@@ -546,7 +622,7 @@ var DetailView = /*#__PURE__*/function (_View) {
 var _default = new DetailView();
 
 exports.default = _default;
-},{"./view":"src/js/views/view.js"}],"src/js/views/paginationView.js":[function(require,module,exports) {
+},{"./view":"src/js/views/view.js","../../img/favicon.png":"src/img/favicon.png"}],"src/js/views/paginationView.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -635,7 +711,60 @@ var PaginationView = /*#__PURE__*/function (_View) {
 var _default = new PaginationView();
 
 exports.default = _default;
-},{"./view":"src/js/views/view.js"}],"src/js/controller.js":[function(require,module,exports) {
+},{"./view":"src/js/views/view.js"}],"src/js/views/searchView.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var SearchView = /*#__PURE__*/function () {
+  function SearchView() {
+    _classCallCheck(this, SearchView);
+
+    _defineProperty(this, "_parentElement", document.querySelector(".search"));
+  }
+
+  _createClass(SearchView, [{
+    key: "getQuery",
+    value: function getQuery() {
+      var input = this._parentElement.querySelector(".search__field").value;
+
+      this._clearInput();
+
+      return input;
+    }
+  }, {
+    key: "addHandlerSearch",
+    value: function addHandlerSearch(handler) {
+      this._parentElement.addEventListener("submit", function (e) {
+        e.preventDefault();
+        handler();
+      });
+    }
+  }, {
+    key: "_clearInput",
+    value: function _clearInput() {
+      this._parentElement.querySelector(".search__field").value = "";
+    }
+  }]);
+
+  return SearchView;
+}();
+
+var _default = new SearchView();
+
+exports.default = _default;
+},{}],"src/js/controller.js":[function(require,module,exports) {
 "use strict";
 
 var model = _interopRequireWildcard(require("./model"));
@@ -645,6 +774,8 @@ var _cryptoListView = _interopRequireDefault(require("./views/cryptoListView"));
 var _detailView = _interopRequireDefault(require("./views/detailView"));
 
 var _paginationView = _interopRequireDefault(require("./views/paginationView"));
+
+var _searchView = _interopRequireDefault(require("./views/searchView"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -667,7 +798,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //     }, s * 1000);
 //   });
 // };
-var controlSearch = /*#__PURE__*/function () {
+var controlList = /*#__PURE__*/function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
     return _regeneratorRuntime().wrap(function _callee$(_context) {
       while (1) {
@@ -685,25 +816,27 @@ var controlSearch = /*#__PURE__*/function () {
 
             _paginationView.default.render(model.state.search);
 
-            _detailView.default.render(model.state.search.cryptoInfo[0]);
+            console.log(model.state.activeCoin);
 
-            _context.next = 12;
+            _detailView.default.render(model.state.activeCoin);
+
+            _context.next = 13;
             break;
 
-          case 9:
-            _context.prev = 9;
+          case 10:
+            _context.prev = 10;
             _context.t0 = _context["catch"](0);
             console.log(_context.t0);
 
-          case 12:
+          case 13:
           case "end":
             return _context.stop();
         }
       }
-    }, _callee, null, [[0, 9]]);
+    }, _callee, null, [[0, 10]]);
   }));
 
-  return function controlSearch() {
+  return function controlList() {
     return _ref.apply(this, arguments);
   };
 }();
@@ -721,15 +854,65 @@ var goToPage = function goToPage(page) {
   _paginationView.default.render(model.state.search);
 };
 
+var controlSearch = /*#__PURE__*/function () {
+  var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+    var query;
+    return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            _context2.prev = 0;
+
+            _detailView.default.renderSpinner();
+
+            query = _searchView.default.getQuery();
+            _context2.next = 5;
+            return model.searchCrypto(query);
+
+          case 5:
+            console.log(model.state.activeCoin);
+
+            _detailView.default.render(model.state.activeCoin);
+
+            _context2.next = 12;
+            break;
+
+          case 9:
+            _context2.prev = 9;
+            _context2.t0 = _context2["catch"](0);
+            console.log(_context2.t0);
+
+          case 12:
+          case "end":
+            return _context2.stop();
+        }
+      }
+    }, _callee2, null, [[0, 9]]);
+  }));
+
+  return function controlSearch() {
+    return _ref2.apply(this, arguments);
+  };
+}();
+
+var controlFavorite = function controlFavorite() {
+  model.addFavorite();
+
+  _detailView.default.render(model.state.activeCoin);
+};
+
 var init = function init() {
   _detailView.default.addHandlerDetails(controlDetails);
 
   _paginationView.default.addHandlerPageChange(goToPage);
+
+  _searchView.default.addHandlerSearch(controlSearch);
 };
 
-controlSearch();
+controlList();
 init();
-},{"./model":"src/js/model.js","./views/cryptoListView":"src/js/views/cryptoListView.js","./views/detailView":"src/js/views/detailView.js","./views/paginationView":"src/js/views/paginationView.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+model.searchCrypto("ethereum");
+},{"./model":"src/js/model.js","./views/cryptoListView":"src/js/views/cryptoListView.js","./views/detailView":"src/js/views/detailView.js","./views/paginationView":"src/js/views/paginationView.js","./views/searchView":"src/js/views/searchView.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -757,7 +940,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62280" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58676" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

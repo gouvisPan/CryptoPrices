@@ -8,6 +8,7 @@ export const state = {
     currentPage: 1,
   },
   activeCoin: {},
+  favorites: []
 };
 
 export const fetchCryptoInfo = async function () {
@@ -69,6 +70,7 @@ export const searchCrypto = async function (query) {
       totalSupply: coin.market_data.max_supply,
       ath: coin.market_data.ath.usd,
       fromAthPerc: coin.market_data.ath_change_percentage.usd,
+      bookmark: false
     };
 
     console.log(state.activeCoin);
@@ -76,4 +78,13 @@ export const searchCrypto = async function (query) {
     console.log(err);
     throw err;
   }
+
+
+
 };
+
+export const addFavorite = function(){
+  state.activeCoin.bookmark = true;
+  state.favorites.push(state.activeCoin);
+ 
+}

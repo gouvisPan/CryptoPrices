@@ -1,4 +1,5 @@
 import View from "./view";
+import favicon from "../../img/favicon.png"
 
 class DetailView extends View {
   _parentEl = document.querySelector(".details");
@@ -14,6 +15,13 @@ class DetailView extends View {
       window.addEventListener(ev, handler)
     );
   }
+
+  addHandlerAddFavorite(handler) {
+    this._parentEl.addEventListener("click", e =>{
+      const btn = e.target.closest()
+    })
+  }
+
 
   _generateMarkup() {
     const percClass = this._data.priceChangePerc > 0 ? "--g" : "--r";
@@ -32,6 +40,7 @@ class DetailView extends View {
           this._data.name
         } </span>
         <span class="crypto-details__top__header__symbol">(${this._data.symbol.toUpperCase()})</span>
+        <img src = "${favicon}" class="crypto-details__top__header__fav"/>
         </div>
         <div class="crypto-details__top__price">        
           <span class="crypto-details__top__price__value">${largeNumFormater.format(

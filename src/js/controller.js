@@ -55,6 +55,12 @@ const controlSearch = async function () {
   }
 };
 
+const controlFavorite = function (){
+  model.addFavorite();
+  detailView.render(model.state.activeCoin);
+}
+
+
 const init = function () {
   detailView.addHandlerDetails(controlDetails);
   paginationView.addHandlerPageChange(goToPage);

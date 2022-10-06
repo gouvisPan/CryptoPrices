@@ -35,7 +35,7 @@ body {
   overflow: hidden;
   display: grid;
   grid-template-rows: 10rem minmax(100rem, auto);
-  grid-template-columns: 1fr 1.2fr;
+  grid-template-columns: 1.15fr 1fr;
   grid-template-areas: "head head" "list recipe";
 }
 @media only screen and (max-width: 78.15em) {
@@ -232,6 +232,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding-top: 1.5rem;
 }
 .header__logo {
   margin-left: 4rem;
@@ -318,17 +319,17 @@ body {
   outline: none;
 }
 .nav__btn:hover {
-  background-color: #f2efee;
+  color: #fff;
 }
 
 .bookmarks {
   padding: 1rem 0;
   position: absolute;
+  border-radius: 5px;
   right: -2.5rem;
   z-index: 10;
-  width: 40rem;
-  background-color: #fff;
-  box-shadow: 0 0.8rem 5rem 2rem rgba(97, 85, 81, 0.1);
+  width: 25rem;
+  color: #fff;
   visibility: hidden;
   opacity: 0;
   transition: all 0.5s 0.2s;
@@ -338,14 +339,13 @@ body {
 }
 .bookmarks__field {
   cursor: pointer;
-  padding: 0 4rem;
+  padding: 0 1rem;
   display: flex;
   align-items: center;
-  height: 100%;
   transition: all 0.3s;
 }
 .bookmarks__field:hover {
-  background-color: #f2efee;
+  background-color: #918581;
 }
 .bookmarks:hover, .nav__btn--bookmarks:hover + .bookmarks {
   visibility: visible;
@@ -355,9 +355,10 @@ body {
 .preview__link:link, .preview__link:visited {
   display: flex;
   align-items: center;
-  padding: 1rem 1rem;
+  padding: 1.3rem 1rem;
   transition: all 0.3s;
   text-decoration: none;
+  border-top: 1px #2e2e2d solid;
 }
 .preview__link:hover {
   background-color: #2e2e2d;
@@ -413,14 +414,20 @@ body {
   display: flex;
   gap: 1rem;
 }
+.preview__img {
+  height: 2.3rem;
+  align-self: center;
+}
 .preview__name {
-  font-size: 1.45rem;
+  font-size: 1.8rem;
   color: #f2efee;
-  font-weight: 600;
+  font-weight: 700;
+  letter-spacing: 0.6px;
 }
 .preview__symbol {
+  margin-top: 0.2rem;
   font-size: 1.2rem;
-  color: #f2efee;
+  color: #918581;
   font-weight: 400;
 }
 .preview__price {
@@ -432,7 +439,7 @@ body {
 }
 
 .search-results {
-  padding: 1rem 2rem;
+  padding: 4rem 6rem 1rem 2rem;
   display: flex;
   flex-direction: column;
   background-color: #121212;
@@ -471,6 +478,7 @@ body {
 
 .crypto-details {
   background-color: #121212;
+  padding-top: 3rem;
   padding-left: 2rem;
   list-style: none;
   color: #f3efed;
@@ -478,10 +486,29 @@ body {
 .crypto-details__top {
   display: flex;
   flex-direction: column;
+  gap: 0.7rem;
 }
-.crypto-details__top__name {
-  font-size: 3rem;
+.crypto-details__top__header {
+  display: flex;
+  gap: 0.4rem;
+}
+.crypto-details__top__header__name {
+  font-size: 2.6rem;
   font-weight: 700;
+  align-self: center;
+}
+.crypto-details__top__header__symbol {
+  font-size: 2.6rem;
+  font-weight: 800;
+  align-self: center;
+}
+.crypto-details__top__header__img {
+  margin-right: 0.5rem;
+  height: 5rem;
+}
+.crypto-details__top__header__fav {
+  margin-left: 15rem;
+  height: 5rem;
 }
 .crypto-details__top__price {
   display: flex;
@@ -489,23 +516,28 @@ body {
 }
 .crypto-details__top__price__value {
   font-size: 3rem;
-  font-weight: 500;
+  font-weight: 600;
 }
 .crypto-details__top__price__perc--g {
   color: rgba(23, 151, 23, 0.849);
   font-size: 2rem;
-  font-weight: 600;
+  font-weight: 800;
+  letter-spacing: 0.6px;
   align-self: center;
 }
 .crypto-details__top__price__perc--r {
   color: rgb(211, 48, 48);
   font-size: 2rem;
-  font-weight: 600;
+  font-weight: 800;
+  letter-spacing: 0.6px;
   align-self: center;
 }
 .crypto-details__bottom {
+  width: 95%;
   display: grid;
   grid-template-columns: repeat(2, minmax(18em, 1fr));
+  row-gap: 1rem;
+  margin-top: 2rem;
 }
 .crypto-details__bottom__fixed {
   font-size: 1.35rem;
@@ -513,7 +545,7 @@ body {
   font-weight: 600;
 }
 .crypto-details__bottom__data {
-  font-size: 2rem;
+  font-size: 1.6rem;
   font-weight: 600;
 }
 .crypto-details .--g {
