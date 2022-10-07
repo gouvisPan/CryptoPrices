@@ -41,6 +41,8 @@ export const loadCoinDetails = function (id) {
   this.state.activeCoin = this.state.search.cryptoInfo.find(
     (coin) => coin.id === id
   );
+
+ 
 };
 
 export const getCryptoPage = function (page = state.search.currentPage) {
@@ -55,7 +57,7 @@ export const getCryptoPage = function (page = state.search.currentPage) {
 export const searchCrypto = async function (query) {
   try {
     const coin = await getJSON(`${API_BASE_URL}coins/${query}`);
-    console.log(coin);
+  
     state.activeCoin = {
       id: coin.id,
       symbol: coin.symbol,
@@ -73,7 +75,6 @@ export const searchCrypto = async function (query) {
       bookmark: false
     };
 
-    console.log(state.activeCoin);
   } catch (err) {
     console.log(err);
     throw err;
@@ -84,7 +85,15 @@ export const searchCrypto = async function (query) {
 };
 
 export const addFavorite = function(){
-  state.activeCoin.bookmark = true;
-  state.favorites.push(state.activeCoin);
- 
+  
+  if(!state.activeCoin.bookmark)  state.favorites.push(state.activeCoin);
+
+  if(state.activeCoin.bookmark) {
+      const i = state.favorites.findIndex(el => el.id === state.activeCoin.id)
+      state.favorites.splice(i,1);
+  }
+
+
+  state.activeCoin.bookmark = !state.activeCoin.bookmark
+
 }

@@ -1,5 +1,5 @@
 import View from "./view";
-import favicon from "../../img/favicon.png"
+import favicon from "../../img/coinStar.png"
 
 class DetailView extends View {
   _parentEl = document.querySelector(".details");
@@ -18,7 +18,13 @@ class DetailView extends View {
 
   addHandlerAddFavorite(handler) {
     this._parentEl.addEventListener("click", e =>{
-      const btn = e.target.closest()
+      const btn = e.target.closest('.btn-fav')
+
+      if(!btn) return
+
+      console.log(btn);
+      btn.classList.add("bounce")
+      handler();
     })
   }
 
@@ -40,7 +46,7 @@ class DetailView extends View {
           this._data.name
         } </span>
         <span class="crypto-details__top__header__symbol">(${this._data.symbol.toUpperCase()})</span>
-        <img src = "${favicon}" class="crypto-details__top__header__fav"/>
+        <img src = "${favicon}" class="crypto-details__top__header__${this._data.bookmark ? "fav-enabled btn-fav" : "fav-disabled btn-fav"}"/>
         </div>
         <div class="crypto-details__top__price">        
           <span class="crypto-details__top__price__value">${largeNumFormater.format(

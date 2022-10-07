@@ -327,7 +327,6 @@ var searchCrypto = /*#__PURE__*/function () {
 
           case 3:
             coin = _context2.sent;
-            console.log(coin);
             state.activeCoin = {
               id: coin.id,
               symbol: coin.symbol,
@@ -344,22 +343,21 @@ var searchCrypto = /*#__PURE__*/function () {
               fromAthPerc: coin.market_data.ath_change_percentage.usd,
               bookmark: false
             };
-            console.log(state.activeCoin);
-            _context2.next = 13;
+            _context2.next = 11;
             break;
 
-          case 9:
-            _context2.prev = 9;
+          case 7:
+            _context2.prev = 7;
             _context2.t0 = _context2["catch"](0);
             console.log(_context2.t0);
             throw _context2.t0;
 
-          case 13:
+          case 11:
           case "end":
             return _context2.stop();
         }
       }
-    }, _callee2, null, [[0, 9]]);
+    }, _callee2, null, [[0, 7]]);
   }));
 
   return function searchCrypto(_x) {
@@ -370,8 +368,16 @@ var searchCrypto = /*#__PURE__*/function () {
 exports.searchCrypto = searchCrypto;
 
 var addFavorite = function addFavorite() {
-  state.activeCoin.bookmark = true;
-  state.favorites.push(state.activeCoin);
+  if (!state.activeCoin.bookmark) state.favorites.push(state.activeCoin);
+
+  if (state.activeCoin.bookmark) {
+    var i = state.favorites.findIndex(function (el) {
+      return el.id === state.activeCoin.id;
+    });
+    state.favorites.splice(i, 1);
+  }
+
+  state.activeCoin.bookmark = !state.activeCoin.bookmark;
 };
 
 exports.addFavorite = addFavorite;
@@ -520,8 +526,8 @@ var CryptoListView = /*#__PURE__*/function (_View) {
 var _default = new CryptoListView();
 
 exports.default = _default;
-},{"./view":"src/js/views/view.js"}],"src/img/favicon.png":[function(require,module,exports) {
-module.exports = "/favicon.beecaf59.png";
+},{"./view":"src/js/views/view.js"}],"src/img/coinStar.png":[function(require,module,exports) {
+module.exports = "/coinStar.bdaa286a.png";
 },{}],"src/js/views/detailView.js":[function(require,module,exports) {
 "use strict";
 
@@ -532,7 +538,7 @@ exports.default = void 0;
 
 var _view = _interopRequireDefault(require("./view"));
 
-var _favicon = _interopRequireDefault(require("../../img/favicon.png"));
+var _coinStar = _interopRequireDefault(require("../../img/coinStar.png"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -600,7 +606,11 @@ var DetailView = /*#__PURE__*/function (_View) {
     key: "addHandlerAddFavorite",
     value: function addHandlerAddFavorite(handler) {
       this._parentEl.addEventListener("click", function (e) {
-        var btn = e.target.closest();
+        var btn = e.target.closest('.btn-fav');
+        if (!btn) return;
+        console.log(btn);
+        btn.classList.add("bounce");
+        handler();
       });
     }
   }, {
@@ -612,7 +622,7 @@ var DetailView = /*#__PURE__*/function (_View) {
         currency: "USD",
         minimumFractionDigits: 0
       });
-      return "\n    <div class=\"crypto-details__top\">\n        <div class=\"crypto-details__top__header\">\n        <img src=\"".concat(this._data.img, "\" class=\"crypto-details__top__header__img\"/>\n        <span class=\"crypto-details__top__header__name\">").concat(this._data.name, " </span>\n        <span class=\"crypto-details__top__header__symbol\">(").concat(this._data.symbol.toUpperCase(), ")</span>\n        <img src = \"").concat(_favicon.default, "\" class=\"crypto-details__top__header__fav\"/>\n        </div>\n        <div class=\"crypto-details__top__price\">        \n          <span class=\"crypto-details__top__price__value\">").concat(largeNumFormater.format(this._data.price), "</span>\n          <span class=\"crypto-details__top__price__perc").concat(percClass, "\">(").concat(this._data.priceChangePerc > 0 ? ["+", this._data.priceChangePerc.toFixed(2)].join("") : this._data.priceChangePerc.toFixed(2), "%)</span>\n        </div>\n    </div>\n    <div class=\"crypto-details__bottom\">\n        <li class=\"crypto-details__bottom__fixed\">ATH</li>\n        <li class=\"crypto-details__bottom__data\">$").concat(this._data.ath, " </li>\n\n        ").concat(this._data.fromAthPerc < 0 ? "<li class =\"crypto-details__bottom__fixed\">From ATH</li> " : "", "\n        ").concat(this._data.fromAthPerc < 0 ? "<li class=\"crypto-details__bottom__data\">".concat(this._data.fromAthPerc.toFixed(2), "%</li> ") : "", "\n       \n        <li class=\"crypto-details__bottom__fixed\">Market Cap</li>\n        <li class=\"crypto-details__bottom__data\">").concat(largeNumFormater.format(this._data.marketCap), " (#").concat(this._data.rank, ")</li>\n        \n        <li class=\"crypto-details__bottom__fixed\">Volume 24h</li>\n        <li class=\"crypto-details__bottom__data\">").concat(largeNumFormater.format(this._data.volume24h), "</li>\n        \n        <li class=\"crypto-details__bottom__fixed\">Circ. supply</li>\n        <li class=\"crypto-details__bottom__data\">").concat(this._data.circulatingSupply, "</li>\n        \n        <li class=\"crypto-details__bottom__fixed\">Total supply</li>\n        <li class=\"crypto-details__bottom__data\">").concat(this._data.totalSupply ? this._data.totalSupply : "-", "</li>\n       \n    </div>\n    ");
+      return "\n    <div class=\"crypto-details__top\">\n        <div class=\"crypto-details__top__header\">\n        <img src=\"".concat(this._data.img, "\" class=\"crypto-details__top__header__img\"/>\n        <span class=\"crypto-details__top__header__name\">").concat(this._data.name, " </span>\n        <span class=\"crypto-details__top__header__symbol\">(").concat(this._data.symbol.toUpperCase(), ")</span>\n        <img src = \"").concat(_coinStar.default, "\" class=\"crypto-details__top__header__").concat(this._data.bookmark ? "fav-enabled btn-fav" : "fav-disabled btn-fav", "\"/>\n        </div>\n        <div class=\"crypto-details__top__price\">        \n          <span class=\"crypto-details__top__price__value\">").concat(largeNumFormater.format(this._data.price), "</span>\n          <span class=\"crypto-details__top__price__perc").concat(percClass, "\">(").concat(this._data.priceChangePerc > 0 ? ["+", this._data.priceChangePerc.toFixed(2)].join("") : this._data.priceChangePerc.toFixed(2), "%)</span>\n        </div>\n    </div>\n    <div class=\"crypto-details__bottom\">\n        <li class=\"crypto-details__bottom__fixed\">ATH</li>\n        <li class=\"crypto-details__bottom__data\">$").concat(this._data.ath, " </li>\n\n        ").concat(this._data.fromAthPerc < 0 ? "<li class =\"crypto-details__bottom__fixed\">From ATH</li> " : "", "\n        ").concat(this._data.fromAthPerc < 0 ? "<li class=\"crypto-details__bottom__data\">".concat(this._data.fromAthPerc.toFixed(2), "%</li> ") : "", "\n       \n        <li class=\"crypto-details__bottom__fixed\">Market Cap</li>\n        <li class=\"crypto-details__bottom__data\">").concat(largeNumFormater.format(this._data.marketCap), " (#").concat(this._data.rank, ")</li>\n        \n        <li class=\"crypto-details__bottom__fixed\">Volume 24h</li>\n        <li class=\"crypto-details__bottom__data\">").concat(largeNumFormater.format(this._data.volume24h), "</li>\n        \n        <li class=\"crypto-details__bottom__fixed\">Circ. supply</li>\n        <li class=\"crypto-details__bottom__data\">").concat(this._data.circulatingSupply, "</li>\n        \n        <li class=\"crypto-details__bottom__fixed\">Total supply</li>\n        <li class=\"crypto-details__bottom__data\">").concat(this._data.totalSupply ? this._data.totalSupply : "-", "</li>\n       \n    </div>\n    ");
     }
   }]);
 
@@ -622,7 +632,7 @@ var DetailView = /*#__PURE__*/function (_View) {
 var _default = new DetailView();
 
 exports.default = _default;
-},{"./view":"src/js/views/view.js","../../img/favicon.png":"src/img/favicon.png"}],"src/js/views/paginationView.js":[function(require,module,exports) {
+},{"./view":"src/js/views/view.js","../../img/coinStar.png":"src/img/coinStar.png"}],"src/js/views/paginationView.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -904,6 +914,8 @@ var controlFavorite = function controlFavorite() {
 var init = function init() {
   _detailView.default.addHandlerDetails(controlDetails);
 
+  _detailView.default.addHandlerAddFavorite(controlFavorite);
+
   _paginationView.default.addHandlerPageChange(goToPage);
 
   _searchView.default.addHandlerSearch(controlSearch);
@@ -940,7 +952,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58676" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61060" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

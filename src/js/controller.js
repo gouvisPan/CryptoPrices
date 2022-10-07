@@ -33,6 +33,7 @@ const controlDetails = function () {
 
   model.loadCoinDetails(id);
   detailView.render(model.state.activeCoin);
+  
 };
 
 const goToPage = function (page) {
@@ -63,6 +64,7 @@ const controlFavorite = function (){
 
 const init = function () {
   detailView.addHandlerDetails(controlDetails);
+  detailView.addHandlerAddFavorite(controlFavorite);
   paginationView.addHandlerPageChange(goToPage);
   searchView.addHandlerSearch(controlSearch);
 };
