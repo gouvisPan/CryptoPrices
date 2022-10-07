@@ -30,7 +30,7 @@ export const fetchCryptoInfo = async function () {
       ath: coin.ath,
       fromAthPerc: coin.ath_change_percentage,
     }));
-    state.activeCoin = state.search.cryptoInfo[0];
+  
   } catch (err) {
     console.log(err);
     throw err;
@@ -38,10 +38,13 @@ export const fetchCryptoInfo = async function () {
 };
 
 export const loadCoinDetails = function (id) {
-  this.state.activeCoin = this.state.search.cryptoInfo.find(
+ 
+  const temp  = state.search.cryptoInfo.find(
     (coin) => coin.id === id
   );
 
+  console.log(temp)
+ state.activeCoin = temp
  
 };
 

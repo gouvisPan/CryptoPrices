@@ -22,7 +22,6 @@ class DetailView extends View {
 
       if(!btn) return
 
-      console.log(btn);
       btn.classList.add("bounce")
       handler();
     })

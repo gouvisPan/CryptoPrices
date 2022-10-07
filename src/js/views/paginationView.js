@@ -9,8 +9,6 @@ class PaginationView extends View {
 
       if (!btn) return;
 
-      console.log(btn);
-      console.log(btn.dataset.goto);
       const goToPage = +btn.dataset.goto;
 
       handler(goToPage);
@@ -22,8 +20,7 @@ class PaginationView extends View {
     const totalPages = Math.ceil(
       this._data.cryptoInfo.length / this._data.resultsPerPage
     );
-    console.log(curPage);
-    console.log(totalPages);
+   
     if (curPage === 1 && totalPages > 1)
       return `
     <button data-goto="${

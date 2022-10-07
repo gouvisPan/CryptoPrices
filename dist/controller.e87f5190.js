@@ -158,39 +158,38 @@ var getJSON = /*#__PURE__*/function () {
         switch (_context.prev = _context.next) {
           case 0:
             _context.prev = 0;
-            console.log(url);
-            _context.next = 4;
+            _context.next = 3;
             return fetch(url);
 
-          case 4:
+          case 3:
             res = _context.sent;
-            _context.next = 7;
+            _context.next = 6;
             return res.json();
 
-          case 7:
+          case 6:
             data = _context.sent;
 
             if (res.ok) {
-              _context.next = 10;
+              _context.next = 9;
               break;
             }
 
             throw new Error("".concat(data.message, " (").concat(res.status, ")"));
 
-          case 10:
+          case 9:
             return _context.abrupt("return", data);
 
-          case 13:
-            _context.prev = 13;
+          case 12:
+            _context.prev = 12;
             _context.t0 = _context["catch"](0);
             throw _context.t0;
 
-          case 16:
+          case 15:
           case "end":
             return _context.stop();
         }
       }
-    }, _callee, null, [[0, 13]]);
+    }, _callee, null, [[0, 12]]);
   }));
 
   return function getJSON(_x) {
@@ -271,22 +270,21 @@ var fetchCryptoInfo = /*#__PURE__*/function () {
                 fromAthPerc: coin.ath_change_percentage
               };
             });
-            state.activeCoin = state.search.cryptoInfo[0];
-            _context.next = 12;
+            _context.next = 11;
             break;
 
-          case 8:
-            _context.prev = 8;
+          case 7:
+            _context.prev = 7;
             _context.t0 = _context["catch"](0);
             console.log(_context.t0);
             throw _context.t0;
 
-          case 12:
+          case 11:
           case "end":
             return _context.stop();
         }
       }
-    }, _callee, null, [[0, 8]]);
+    }, _callee, null, [[0, 7]]);
   }));
 
   return function fetchCryptoInfo() {
@@ -297,9 +295,11 @@ var fetchCryptoInfo = /*#__PURE__*/function () {
 exports.fetchCryptoInfo = fetchCryptoInfo;
 
 var loadCoinDetails = function loadCoinDetails(id) {
-  this.state.activeCoin = this.state.search.cryptoInfo.find(function (coin) {
+  var temp = state.search.cryptoInfo.find(function (coin) {
     return coin.id === id;
   });
+  console.log(temp);
+  state.activeCoin = temp;
 };
 
 exports.loadCoinDetails = loadCoinDetails;
@@ -608,7 +608,6 @@ var DetailView = /*#__PURE__*/function (_View) {
       this._parentEl.addEventListener("click", function (e) {
         var btn = e.target.closest('.btn-fav');
         if (!btn) return;
-        console.log(btn);
         btn.classList.add("bounce");
         handler();
       });
@@ -695,8 +694,6 @@ var PaginationView = /*#__PURE__*/function (_View) {
       this._parentEl.addEventListener("click", function (e) {
         var btn = e.target.closest(".btn--inline");
         if (!btn) return;
-        console.log(btn);
-        console.log(btn.dataset.goto);
         var goToPage = +btn.dataset.goto;
         handler(goToPage);
       });
@@ -706,8 +703,6 @@ var PaginationView = /*#__PURE__*/function (_View) {
     value: function _generateMarkup() {
       var curPage = this._data.currentPage;
       var totalPages = Math.ceil(this._data.cryptoInfo.length / this._data.resultsPerPage);
-      console.log(curPage);
-      console.log(totalPages);
       if (curPage === 1 && totalPages > 1) return "\n    <button data-goto=\"".concat(curPage + 1, "\" class=\"btn--inline  pagination__btn--next\">\n    <span>Page ").concat(curPage + 1, "</span>\n \n  </button> \n    ");
       if (totalPages > 1 && curPage === totalPages) return "\n    <button data-goto=\"".concat(curPage - 1, "\" class=\"btn--inline  pagination__btn--prev\">\n            <span>Page").concat(curPage - 1, "</span>\n          </button>\n    ");
       if (curPage < totalPages) return "\n        <button data-goto=\"".concat(curPage - 1, "\" class=\"btn--inline  pagination__btn--prev\">\n         \n            <span>Page ").concat(curPage - 1, "</span>\n          </button>\n\n          <button data-goto=\"").concat(curPage + 1, "\" class=\"btn--inline  pagination__btn--next\">\n            <span>Page ").concat(curPage + 1, "</span>\n    \n          </button> \n    ");
@@ -826,7 +821,7 @@ var controlList = /*#__PURE__*/function () {
 
             _paginationView.default.render(model.state.search);
 
-            console.log(model.state.activeCoin);
+            controlDetails();
 
             _detailView.default.render(model.state.activeCoin);
 
@@ -923,7 +918,6 @@ var init = function init() {
 
 controlList();
 init();
-model.searchCrypto("ethereum");
 },{"./model":"src/js/model.js","./views/cryptoListView":"src/js/views/cryptoListView.js","./views/detailView":"src/js/views/detailView.js","./views/paginationView":"src/js/views/paginationView.js","./views/searchView":"src/js/views/searchView.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -952,7 +946,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61060" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49943" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

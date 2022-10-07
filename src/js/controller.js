@@ -21,7 +21,7 @@ const controlList = async function () {
     cryptoListView.render(model.getCryptoPage());
     paginationView.render(model.state.search);
 
-    console.log(model.state.activeCoin);
+    controlDetails();
     detailView.render(model.state.activeCoin);
   } catch (err) {
     console.log(err);
@@ -30,8 +30,9 @@ const controlList = async function () {
 
 const controlDetails = function () {
   const id = window.location.hash.slice(1);
-
+  
   model.loadCoinDetails(id);
+
   detailView.render(model.state.activeCoin);
   
 };
@@ -72,4 +73,4 @@ const init = function () {
 controlList();
 init();
 
-model.searchCrypto("ethereum");
+
