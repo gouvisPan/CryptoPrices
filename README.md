@@ -5,9 +5,9 @@
 A web application that provides price updates for the top 100 cryptocurrency coins/tokens (sorted by market cap). The user can check various data about each crypto, including market cap, trading volume, circ. supply etc. The app also provides bookmark functionality, hence lets the users save their personal favourites in a dedicated list.
 
 Tech and tools
--- JavaScript with SASS and HTML
--- Coin gecko API as data source 
--- MCV Architecture 
+- JavaScript with SASS and HTML
+- Coin gecko API as data source 
+- MCV Architecture 
 
 Purpose of this creation 
 
