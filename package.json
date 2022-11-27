@@ -4,7 +4,7 @@
   "description": "Live price displaying website",
   "scripts": {
     "start": "parcel index.html",
-    "build": "parcel build index.html"
+    "build": "parcel build index.html --dist-dir ./dist"
   },
   "author": "Gouvis Panagiotis",
   "license": "ISC",
