@@ -8,7 +8,7 @@ A web application that provides price updates for the top 100 cryptocurrency coi
 Tech and tools
 - JavaScript with SASS and HTML
 - Coin gecko API as data source 
-- MCV Architecture 
+- MVC Architecture 
 
 ## Purpose of this creation 
 I developed this App in order to get my feet into plain JS, as I mainly develop using ReactJs and found it a great idea to apply my newly gained SASS course experience . I used the MCV architecture in order to make the code readable, maintainable and more fun to write. 
